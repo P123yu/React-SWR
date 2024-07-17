@@ -1,0 +1,117 @@
+
+
+// App.jsx   ========================================================================================================================================================================
+
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+
+import A from "./Pages/A";
+import B from "./Pages/B";
+import C from "./Pages/C";
+
+function App() {
+  return (
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<A />} />
+          <Route path="/b" element={<B />} />
+          <Route path="/c" element={<C />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
+}
+
+export default App;
+
+
+
+// SwrConfig.jsx   =================================================================================================================================================================
+
+import axios from "axios";
+export const fetcher = (url) => axios.get(url).then((res) => res.data);
+
+
+// A.jsx    ========================================================================================================================================================================
+
+
+import React from "react";
+import useSWR from "swr";
+import { fetcher } from "../Service/swr_config";
+
+const A = () => {
+  const { data, error } = useSWR(
+    "https://jsonplaceholder.typicode.com/users/1",
+    fetcher
+  );
+
+  if (!data) return <div>Loading...</div>;
+
+  const { id, name } = data;
+  console.log(id, name);
+
+  return (
+    <div>
+      <h2>Component 1</h2>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+    </div>
+  );
+};
+
+export default A;
+
+
+
+// B.jsx      =========================================================================================================================================================================
+
+
+import React from "react";
+import useSWR from "swr";
+import { fetcher } from "../Service/swr_config";
+
+const B = () => {
+  const { data, error } = useSWR(
+    "https://jsonplaceholder.typicode.com/users/2",
+    fetcher
+  );
+
+  if (!data && !error) return <div>Loading...</div>;
+  if (error) return <div>Error loading data</div>;
+
+  return (
+    <div>
+      <h2>Component 1</h2>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+    </div>
+  );
+};
+
+export default B;
+
+
+
+// c.jsx      =======================================================================================================================================================================
+
+import React from "react";
+import useSWR from "swr";
+import { fetcher } from "../Service/swr_config";
+
+const C = () => {
+  const { data, error } = useSWR(
+    "https://jsonplaceholder.typicode.com/users/3",
+    fetcher
+  );
+
+  if (!data && !error) return <div>Loading...</div>;
+  if (error) return <div>Error loading data</div>;
+
+  return (
+    <div>
+      <h2>Component 1</h2>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+    </div>
+  );
+};
+
+export default C;
