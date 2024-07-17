@@ -1,0 +1,37 @@
+
+
+
+import React, { useState } from "react";
+import useSWR from "swr";
+import { fetcher } from "../Service/swr_config";
+
+const A = () => {
+  const [userId, setUserId] = useState(null);
+
+  const { data, error } = useSWR(
+    userId
+      ? `https://jsonplaceholder.typicode.com/users/${userId}`
+      : "https://jsonplaceholder.typicode.com/users/1",
+    fetcher
+  );
+
+  if (!data) return <div>Loading...</div>;
+
+  const { id, name } = data;
+  console.log(id, name);
+
+  const handleFetchData = (id) => {
+    setUserId(id);
+  };
+
+  return (
+    <div>
+      <h2>Component 1</h2>
+      <button onClick={() => handleFetchData(1)}>Fetch User 1</button>
+      <button onClick={() => handleFetchData(2)}>Fetch User 2</button>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+    </div>
+  );
+};
+
+export default A;
