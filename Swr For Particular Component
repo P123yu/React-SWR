@@ -1,0 +1,52 @@
+
+// npm i swr axios
+
+
+import axios from "axios";
+import React, { useState } from "react";
+import useSWR from "swr";
+
+// Define a fetcher function that uses axios
+const fetcher = (url) => axios.get(url).then((res) => res.data);
+
+const Form1 = () => {
+  const [userId, setUserId] = useState(null);
+
+  // Conditionally fetch data based on the userId
+  const { data, error } = useSWR(
+    userId ? `https://jsonplaceholder.typicode.com/users/${userId}` : null,
+    fetcher
+  );
+
+  const handleFetchData = (id) => {
+    setUserId(id);
+  };
+
+  console.log(data);
+
+  // Handle the loading state
+  if (!data && !error && userId) {
+    return <div>Loading...</div>;
+  }
+
+  // Handle the error state
+  if (error) {
+    return <div>Error loading data</div>;
+  }
+
+  return (
+    <div>
+      <h1>API Data</h1>
+      <button onClick={() => handleFetchData(1)}>Fetch User 1</button>
+      <button onClick={() => handleFetchData(2)}>Fetch User 2</button>
+
+      {data ? (
+        <pre>{JSON.stringify(data, null, 2)}</pre>
+      ) : (
+        <div>Click a button to fetch data</div>
+      )}
+    </div>
+  );
+};
+
+export default Form1;
